@@ -16,11 +16,14 @@ public class Todo {
     @Column(name = "todo_description")
     private String description;
 
+    private boolean done;
+
     public Todo() {}
 
-    public Todo(String name, String description) {
+    public Todo(String name, String description, boolean done) {
         this.name = name;
         this.description = description;
+        this.done = done;
     }
 
     public Long getId() {
@@ -41,5 +44,13 @@ public class Todo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }
