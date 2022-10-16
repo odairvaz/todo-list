@@ -2,29 +2,30 @@ package com.oda.todolist.com.oda.todolist.controller;
 
 import com.oda.todolist.com.oda.todolist.model.Todo;
 import com.oda.todolist.com.oda.todolist.repository.TodoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/todos")
 public class TodoController {
 
-    @Autowired
     private TodoRepository repository;
+
+    public TodoController(TodoRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Get all todos
      * @return ResponseEntity all the todo in the api and the response status
      */
-    @GetMapping("/todos")
-    public ResponseEntity<List<Todo>> getAllTodos() {
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    @GetMapping
+    public List<Todo> getAllTodos() {
+        return repository.findAll();
     }
 
     /**
@@ -32,23 +33,18 @@ public class TodoController {
      * @param id if of the todo to be found
      * @return the todo
      */
-    @GetMapping("/todos/{id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable("id") long id) {
-        try {
-            return new ResponseEntity<>(repository.findById(id).get(), HttpStatus.OK);
-        } catch (Exception exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}")
+    public Todo getTodo(@PathVariable("id") long id) {
+        return repository.findById(id).orElseThrow();
     }
 
     /**
      * Add a new todo to the list
      * @param todo todo to be added
-     * @return the newly added todo
      */
-    @PostMapping("/todos")
-    public Todo addTodo(@RequestBody Todo todo) {
-        return repository.save(todo);
+    @PostMapping
+    public void addTodo(@RequestBody Todo todo) {
+        repository.save(todo);
     }
 
     /**
@@ -57,8 +53,9 @@ public class TodoController {
      * @param todo New info to update the todo
      * @return ResponseEntity
      */
-    @PutMapping("/todos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable("id") long id, @RequestBody Todo todo) {
+        //Update use .map
         Optional<Todo> tobeUpdated = repository.findById(id);
 
         if (tobeUpdated.isPresent()) {
@@ -76,14 +73,9 @@ public class TodoController {
      * @param id id of the todo to be removed
      * @throws Exception NOT_FOUND it the id doesn't exist
      */
-    @DeleteMapping("/todos/{id}")
-    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") long id) throws IllegalArgumentException {
-        try {
-            repository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/{id}")
+    public void deleteTodo(@PathVariable("id") long id) throws IllegalArgumentException {
+        repository.deleteById(id);
     }
 
 }

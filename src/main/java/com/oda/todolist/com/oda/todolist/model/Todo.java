@@ -1,19 +1,25 @@
 package com.oda.todolist.com.oda.todolist.model;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-@Entity(name = "todos")
+@Entity
 public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "todo_name", nullable = false)
+    @Size(min = 3, max = 20)
+    @NotBlank(message = "Name may not be null")
     private String name;
 
-    @Column(name = "todo_description")
+    @Size(max = 255)
     private String description;
 
     private boolean done;
@@ -24,10 +30,6 @@ public class Todo {
         this.name = name;
         this.description = description;
         this.done = done;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
