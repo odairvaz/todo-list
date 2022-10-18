@@ -43,8 +43,8 @@ public class TodoController {
      * @param todo todo to be added
      */
     @PostMapping
-    public void addTodo(@RequestBody Todo todo) {
-        repository.save(todo);
+    public Todo addTodo(@RequestBody Todo todo) {
+        return repository.save(todo);
     }
 
     /**
