@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication
-public class TodoListApplication {
+public class Application {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TodoListApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(TodoListApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 
@@ -25,6 +25,7 @@ public class TodoListApplication {
         return (args) -> {
             repository.save(new Todo("JS","Learn js fundamentals", false));
             repository.save(new Todo("React","Learn React", false));
+            repository.save(new Todo("Java Spring","Spring - advance in learning spring", false));
             repository.save(new Todo("UCL","Watch sporting vs Marseille", true));
 
             for (Todo todo : repository.findAll()) {
